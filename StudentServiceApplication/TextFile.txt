@@ -1,0 +1,19 @@
+﻿public User Login(User oUser)
+        {
+            var user = Global.Users.SingleOrDefault(x => x.UserName == oUser.UserName);
+
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(oUser.Password, user.Password);
+
+            if(isValidPassword)
+            {
+                return user;
+            }
+            return null;
+        }
+
+        public User SignUp(User oUser)
+        {
+            oUser.Password = BCrypt.Net.BCrypt.HashPassword(oUser.Password);
+            Global.Users.Add(oUser);
+            return oUser;
+        }
