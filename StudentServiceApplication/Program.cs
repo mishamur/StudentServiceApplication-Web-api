@@ -26,11 +26,11 @@ namespace StudentServiceApplication
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         // указывает, будет ли валидироваться издатель при валидации токена
-                        ValidateIssuer = true,
+                        ValidateIssuer = false,
                         // строка, представляющая издателя
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
                         // будет ли валидироваться потребитель токена
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         // установка потребителя токена
                         ValidAudience = builder.Configuration["Jwt:Audience"],
                         // будет ли валидироваться время существования

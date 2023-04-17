@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StudentServiceApplication.Interfaces;
 using StudentServiceApplication.Models;
 using StudentServiceApplication.ViewModels;
 using System.ComponentModel;
@@ -12,9 +13,11 @@ namespace StudentServiceApplication.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        public AccountController(ApplicationContext context)
+        private readonly ITokenService _tokenService;
+        public AccountController(ApplicationContext context, ITokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
 
         //пароль хранить в базе не в явном виде!!!!
@@ -35,7 +38,9 @@ namespace StudentServiceApplication.Controllers
             User user = new User { Email = userRegister.Email, Password = userRegister.Password};
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            return Ok(user);
+            
+
+            return Ok(new {Email = user.Email, Token =  _tokenService.CreateToken(user)});
         }
 
         [HttpPost("login")]
@@ -52,10 +57,9 @@ namespace StudentServiceApplication.Controllers
 
             //должна быть проверка hash`ей
             if (user.Password.Equals(userLogin.Password))
-                return Ok(user);
+                return Ok(new { Email = user.Email, Token = _tokenService.CreateToken(user) });
             return Unauthorized();
         }
-
 
         /// <summary>
         /// 
