@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StudentServiceApplication.Models;
 using StudentServiceApplication.ViewModels;
@@ -14,7 +16,7 @@ namespace StudentServiceApplication.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public LoginController(IConfiguration configuration)
         {
@@ -34,6 +36,8 @@ namespace StudentServiceApplication.Controllers
         //    return NotFound("User not found");
         //}
 
+
+        [NonAction]
         private string Generate(User user)
         {
             var securKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -41,10 +45,10 @@ namespace StudentServiceApplication.Controllers
             string s = _configuration["Jwt:Key"];
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.Lastname),
-                new Claim(ClaimTypes.Surname, user.Firstname)
+                //new Claim(ClaimTypes.NameIdentifier, user.Username),
+                new Claim(ClaimTypes.Email, user.Email)
+                //new Claim(ClaimTypes.GivenName, user.Lastname),
+                //new Claim(ClaimTypes.Surname, user.Firstname)
             };
 
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Audience"], claims,

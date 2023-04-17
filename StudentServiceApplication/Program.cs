@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
+using StudentServiceApplication.Interfaces;
+using StudentServiceApplication.Services;
 
 namespace StudentServiceApplication
 {
@@ -40,9 +42,11 @@ namespace StudentServiceApplication
                     };
                 });
             builder.Services.AddControllers();
+            builder.Services.AddScoped<ITokenService, TokenService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            
 
             var app = builder.Build();
 

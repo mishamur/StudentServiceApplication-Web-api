@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230413135811_ft8")]
+    partial class ft8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,7 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("StudentServiceApplication.Models.Language", b =>
                 {
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid>("InteresId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -62,7 +65,7 @@ namespace StudentServiceApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("LanguageId");
+                    b.HasKey("InteresId");
 
                     b.ToTable("Languages");
                 });
@@ -123,6 +126,9 @@ namespace StudentServiceApplication.Migrations
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uuid");
 
+                            b1.Property<Guid>("CountryId")
+                                .HasColumnType("uuid");
+
                             b1.Property<DateTime?>("DateOfBirthday")
                                 .HasColumnType("timestamp with time zone");
 
@@ -143,10 +149,20 @@ namespace StudentServiceApplication.Migrations
 
                             b1.HasKey("UserId");
 
+                            b1.HasIndex("CountryId");
+
                             b1.ToTable("Users");
+
+                            b1.HasOne("StudentServiceApplication.Models.Country", "Country")
+                                .WithMany()
+                                .HasForeignKey("CountryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.Navigation("Country");
                         });
 
                     b.Navigation("UserProfile");

@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentServiceApplication.Models
 {
-    public class Interes
+    public class Skill
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid InteresId { get; set; }
+        public Guid SkillId { get; set; }
         [Required]
         public string Name { get; set; }
     }

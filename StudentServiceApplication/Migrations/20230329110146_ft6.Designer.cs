@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230329110146_ft6")]
+    partial class ft6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace StudentServiceApplication.Migrations
 
                     b.HasKey("InteresId");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countrys");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.Interes", b =>
@@ -54,7 +57,7 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("StudentServiceApplication.Models.Language", b =>
                 {
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid>("InteresId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -62,7 +65,7 @@ namespace StudentServiceApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("LanguageId");
+                    b.HasKey("InteresId");
 
                     b.ToTable("Languages");
                 });
@@ -73,15 +76,38 @@ namespace StudentServiceApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateOfBirthday")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Firstname")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("Gender")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Lastname")
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("bytea");
+
                     b.HasKey("UserId");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Users");
                 });
@@ -118,38 +144,13 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
                 {
-                    b.OwnsOne("StudentServiceApplication.Models.UserProfile", "UserProfile", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uuid");
+                    b.HasOne("StudentServiceApplication.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b1.Property<DateTime?>("DateOfBirthday")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<string>("Firstname")
-                                .HasColumnType("text");
-
-                            b1.Property<bool?>("Gender")
-                                .HasColumnType("boolean");
-
-                            b1.Property<string>("Lastname")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("PhoneNumber")
-                                .HasColumnType("text");
-
-                            b1.Property<byte[]>("ProfileImage")
-                                .HasColumnType("bytea");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.Navigation("UserProfile");
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.UserInteres", b =>

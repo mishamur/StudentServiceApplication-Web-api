@@ -2,7 +2,7 @@
 
 namespace StudentServiceApplication.ViewModels
 {
-    public class UserLogin
+    public class UserRegister
     {
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -10,5 +10,10 @@ namespace StudentServiceApplication.ViewModels
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        public string ConformPassword { get; set; }
     }
 }
