@@ -14,10 +14,12 @@ namespace StudentServiceApplication.Controllers
     {
         private readonly ApplicationContext _context;
         private readonly ITokenService _tokenService;
-        public AccountController(ApplicationContext context, ITokenService tokenService)
+        private readonly IHashService _hashService;
+        public AccountController(ApplicationContext context, ITokenService tokenService, IHashService hashService)
         {
             _context = context;
             _tokenService = tokenService;
+            _hashService = hashService;
         }
 
         //пароль хранить в базе не в явном виде!!!!
@@ -35,7 +37,7 @@ namespace StudentServiceApplication.Controllers
                 return BadRequest("пользователь с таким именем уже зарегистрирован");
             }
 
-            User user = new User { Email = userRegister.Email, Password = userRegister.Password};
+            User user = new User { Email = userRegister.Email, Password = _hashService.HashPassword(userRegister.Password)};
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             
@@ -56,7 +58,7 @@ namespace StudentServiceApplication.Controllers
             if(user == null) { return Unauthorized("Неверный логин и(или) пароль"); }
 
             //должна быть проверка hash`ей
-            if (user.Password.Equals(userLogin.Password))
+            if(_hashService.VerifyPassword(userLogin.Password, user.Password))
                 return Ok(new { Email = user.Email, Token = _tokenService.CreateToken(user) });
             return Unauthorized();
         }

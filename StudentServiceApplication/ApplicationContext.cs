@@ -12,6 +12,7 @@ namespace StudentServiceApplication
         public DbSet<Language> Languages { get; set; } = null!;
         public DbSet<UserLanguages> UserLanguages { get; set; } = null!;
         public DbSet<Country> Countries { get; set; } = null!;
+        public DbSet<Institute> Institutes { get; set; } = null!;
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             
