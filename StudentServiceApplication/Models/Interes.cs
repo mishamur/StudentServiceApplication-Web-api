@@ -10,5 +10,6 @@ namespace StudentServiceApplication.Models
         public Guid InteresId { get; set; }
         [Required]
         public string Name { get; set; }
+        public ICollection<User> UsersProfiles { get; } = new List<User>();
     }
 }

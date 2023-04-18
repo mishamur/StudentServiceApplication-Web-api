@@ -13,5 +13,6 @@ namespace StudentServiceApplication.Models
         public byte[]? ProfileImage { get; set; }
         public Guid InstituteId { get; set; }
         public Institute Institute { get; set; } = null!;
+
     }
 }
