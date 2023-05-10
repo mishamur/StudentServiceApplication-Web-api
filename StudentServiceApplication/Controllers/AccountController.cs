@@ -22,7 +22,6 @@ namespace StudentServiceApplication.Controllers
             _hashService = hashService;
         }
 
-        //пароль хранить в базе не в явном виде!!!!
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody]UserRegister? userRegister)
         {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230428165121_ft15")]
+    partial class ft15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,14 +163,9 @@ namespace StudentServiceApplication.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TranslatePhotos");
+                    b.ToTable("TranslatePhoto");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
@@ -176,14 +174,14 @@ namespace StudentServiceApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CountryId")
+                    b.Property<Guid?>("CountryId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("InstituteId")
+                    b.Property<Guid?>("InstituteIstituteId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Password")
@@ -194,9 +192,24 @@ namespace StudentServiceApplication.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("InstituteId");
+                    b.HasIndex("InstituteIstituteId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TranslatePhotoUser", b =>
+                {
+                    b.Property<Guid>("TranslatePhotosId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("TranslatePhotosId", "UsersUserId");
+
+                    b.HasIndex("UsersUserId");
+
+                    b.ToTable("TranslatePhotoUser");
                 });
 
             modelBuilder.Entity("InteresUser", b =>
@@ -244,34 +257,22 @@ namespace StudentServiceApplication.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StudentServiceApplication.Models.TranslatePhoto", b =>
-                {
-                    b.HasOne("StudentServiceApplication.Models.User", "User")
-                        .WithMany("TranslatePhotos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
                 {
-                    b.HasOne("StudentServiceApplication.Models.Country", "Country")
+                    b.HasOne("StudentServiceApplication.Models.Country", null)
                         .WithMany("Users")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CountryId");
 
-                    b.HasOne("StudentServiceApplication.Models.Institute", "Institute")
+                    b.HasOne("StudentServiceApplication.Models.Institute", null)
                         .WithMany("Users")
-                        .HasForeignKey("InstituteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InstituteIstituteId");
 
                     b.OwnsOne("StudentServiceApplication.Models.UserProfile", "UserProfile", b1 =>
                         {
                             b1.Property<Guid>("UserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("CountryId")
                                 .HasColumnType("uuid");
 
                             b1.Property<byte?>("Course")
@@ -289,6 +290,9 @@ namespace StudentServiceApplication.Migrations
                             b1.Property<bool?>("Gender")
                                 .HasColumnType("boolean");
 
+                            b1.Property<Guid>("InstituteId")
+                                .HasColumnType("uuid");
+
                             b1.Property<string>("Lastname")
                                 .HasColumnType("text");
 
@@ -303,17 +307,48 @@ namespace StudentServiceApplication.Migrations
 
                             b1.HasKey("UserId");
 
+                            b1.HasIndex("CountryId");
+
+                            b1.HasIndex("InstituteId");
+
                             b1.ToTable("Users");
+
+                            b1.HasOne("StudentServiceApplication.Models.Country", "Country")
+                                .WithMany()
+                                .HasForeignKey("CountryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.HasOne("StudentServiceApplication.Models.Institute", "Institute")
+                                .WithMany()
+                                .HasForeignKey("InstituteId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.Navigation("Country");
+
+                            b1.Navigation("Institute");
                         });
 
-                    b.Navigation("Country");
-
-                    b.Navigation("Institute");
-
                     b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("TranslatePhotoUser", b =>
+                {
+                    b.HasOne("StudentServiceApplication.Models.TranslatePhoto", null)
+                        .WithMany()
+                        .HasForeignKey("TranslatePhotosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentServiceApplication.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.Country", b =>
@@ -324,11 +359,6 @@ namespace StudentServiceApplication.Migrations
             modelBuilder.Entity("StudentServiceApplication.Models.Institute", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
-                {
-                    b.Navigation("TranslatePhotos");
                 });
 #pragma warning restore 612, 618
         }

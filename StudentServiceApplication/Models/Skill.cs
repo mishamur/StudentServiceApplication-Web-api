@@ -10,6 +10,6 @@ namespace StudentServiceApplication.Models
         public Guid SkillId { get; set; }
         [Required]
         public string Name { get; set; }
-        public ICollection<User> UsersProfiles { get; } = new List<User>();
+        public ICollection<User> Users { get; } = new List<User>();
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230428164958_ft14")]
+    partial class ft14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,14 +163,9 @@ namespace StudentServiceApplication.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TranslatePhotos");
+                    b.ToTable("TranslatePhoto");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
@@ -197,6 +195,21 @@ namespace StudentServiceApplication.Migrations
                     b.HasIndex("InstituteId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TranslatePhotoUser", b =>
+                {
+                    b.Property<Guid>("TranslatePhotosId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("TranslatePhotosId", "UsersUserId");
+
+                    b.HasIndex("UsersUserId");
+
+                    b.ToTable("TranslatePhotoUser");
                 });
 
             modelBuilder.Entity("InteresUser", b =>
@@ -242,17 +255,6 @@ namespace StudentServiceApplication.Migrations
                         .HasForeignKey("UsersUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("StudentServiceApplication.Models.TranslatePhoto", b =>
-                {
-                    b.HasOne("StudentServiceApplication.Models.User", "User")
-                        .WithMany("TranslatePhotos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
@@ -316,6 +318,21 @@ namespace StudentServiceApplication.Migrations
                     b.Navigation("UserProfile");
                 });
 
+            modelBuilder.Entity("TranslatePhotoUser", b =>
+                {
+                    b.HasOne("StudentServiceApplication.Models.TranslatePhoto", null)
+                        .WithMany()
+                        .HasForeignKey("TranslatePhotosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentServiceApplication.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("StudentServiceApplication.Models.Country", b =>
                 {
                     b.Navigation("Users");
@@ -324,11 +341,6 @@ namespace StudentServiceApplication.Migrations
             modelBuilder.Entity("StudentServiceApplication.Models.Institute", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("StudentServiceApplication.Models.User", b =>
-                {
-                    b.Navigation("TranslatePhotos");
                 });
 #pragma warning restore 612, 618
         }

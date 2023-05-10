@@ -7,8 +7,10 @@ namespace StudentServiceApplication.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid InteresId { get; set; }
+        public Guid CountryId { get; set; }
         [Required]
         public string Name { get; set; }
+
+        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }
