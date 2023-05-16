@@ -12,55 +12,55 @@ namespace StudentServiceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InteresController : ControllerBase
+    public class CountriesController : ControllerBase
     {
         private readonly ApplicationContext _context;
 
-        public InteresController(ApplicationContext context)
+        public CountriesController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Interes
+        // GET: api/Countries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Interes>>> GetInterests()
+        public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
         {
-          if (_context.Interests == null)
+          if (_context.Countries == null)
           {
               return NotFound();
           }
-            return await _context.Interests.ToListAsync();
+            return await _context.Countries.ToListAsync();
         }
 
-        // GET: api/Interes/5
+        // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Interes>> GetInteres(Guid id)
+        public async Task<ActionResult<Country>> GetCountry(Guid id)
         {
-          if (_context.Interests == null)
+          if (_context.Countries == null)
           {
               return NotFound();
           }
-            var interes = await _context.Interests.FindAsync(id);
+            var country = await _context.Countries.FindAsync(id);
 
-            if (interes == null)
+            if (country == null)
             {
                 return NotFound();
             }
 
-            return interes;
+            return country;
         }
 
-        // PUT: api/Interes/5
+        // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInteres(Guid id, Interes interes)
+        public async Task<IActionResult> PutCountry(Guid id, Country country)
         {
-            if (id != interes.InteresId)
+            if (id != country.CountryId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(interes).State = EntityState.Modified;
+            _context.Entry(country).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace StudentServiceApplication.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InteresExists(id))
+                if (!CountryExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace StudentServiceApplication.Controllers
             return NoContent();
         }
 
-        // POST: api/Interes
+        // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Interes>> PostInteres(Interes interes)
+        public async Task<ActionResult<Country>> PostCountry(Country country)
         {
-          if (_context.Interests == null)
+          if (_context.Countries == null)
           {
-              return Problem("Entity set 'ApplicationContext.Interests'  is null.");
+              return Problem("Entity set 'ApplicationContext.Countries'  is null.");
           }
-            _context.Interests.Add(interes);
+            _context.Countries.Add(country);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInteres", new { id = interes.InteresId }, interes);
+            return CreatedAtAction("GetCountry", new { id = country.CountryId }, country);
         }
 
-        // DELETE: api/Interes/5
+        // DELETE: api/Countries/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInteres(Guid id)
+        public async Task<IActionResult> DeleteCountry(Guid id)
         {
-            if (_context.Interests == null)
+            if (_context.Countries == null)
             {
                 return NotFound();
             }
-            var interes = await _context.Interests.FindAsync(id);
-            if (interes == null)
+            var country = await _context.Countries.FindAsync(id);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            _context.Interests.Remove(interes);
+            _context.Countries.Remove(country);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool InteresExists(Guid id)
+        private bool CountryExists(Guid id)
         {
-            return (_context.Interests?.Any(e => e.InteresId == id)).GetValueOrDefault();
+            return (_context.Countries?.Any(e => e.CountryId == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentServiceApplication.Interfaces;
 using StudentServiceApplication.Models;
 using StudentServiceApplication.ViewModels;
-using System.ComponentModel;
 
 namespace StudentServiceApplication.Controllers
 {
@@ -29,8 +27,6 @@ namespace StudentServiceApplication.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //проверка на то что пользователь с таким email уже существует
-            //можно вынести в отдельный метод
             if (FindByEmailAsync(userRegister.Email).Result)
             {
                 return BadRequest("пользователь с таким именем уже зарегистрирован");
@@ -40,7 +36,6 @@ namespace StudentServiceApplication.Controllers
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             
-
             return Ok(new {Email = user.Email, Token =  _tokenService.CreateToken(user)});
         }
 
@@ -63,7 +58,7 @@ namespace StudentServiceApplication.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Поиск пользователя по заданному email
         /// </summary>
         /// <param name="email"></param>
         /// <returns>true, if finded. false if not finded</returns>
@@ -72,6 +67,5 @@ namespace StudentServiceApplication.Controllers
         {
             return await _context.Users.SingleOrDefaultAsync(u => u.Email.Equals(email)) != null;
         }
-
     }
 }

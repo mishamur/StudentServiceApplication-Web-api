@@ -12,55 +12,55 @@ namespace StudentServiceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InteresController : ControllerBase
+    public class LanguagesController : ControllerBase
     {
         private readonly ApplicationContext _context;
 
-        public InteresController(ApplicationContext context)
+        public LanguagesController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Interes
+        // GET: api/Languages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Interes>>> GetInterests()
+        public async Task<ActionResult<IEnumerable<Language>>> GetLanguages()
         {
-          if (_context.Interests == null)
+          if (_context.Languages == null)
           {
               return NotFound();
           }
-            return await _context.Interests.ToListAsync();
+            return await _context.Languages.ToListAsync();
         }
 
-        // GET: api/Interes/5
+        // GET: api/Languages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Interes>> GetInteres(Guid id)
+        public async Task<ActionResult<Language>> GetLanguage(Guid id)
         {
-          if (_context.Interests == null)
+          if (_context.Languages == null)
           {
               return NotFound();
           }
-            var interes = await _context.Interests.FindAsync(id);
+            var language = await _context.Languages.FindAsync(id);
 
-            if (interes == null)
+            if (language == null)
             {
                 return NotFound();
             }
 
-            return interes;
+            return language;
         }
 
-        // PUT: api/Interes/5
+        // PUT: api/Languages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInteres(Guid id, Interes interes)
+        public async Task<IActionResult> PutLanguage(Guid id, Language language)
         {
-            if (id != interes.InteresId)
+            if (id != language.LanguageId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(interes).State = EntityState.Modified;
+            _context.Entry(language).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace StudentServiceApplication.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InteresExists(id))
+                if (!LanguageExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace StudentServiceApplication.Controllers
             return NoContent();
         }
 
-        // POST: api/Interes
+        // POST: api/Languages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Interes>> PostInteres(Interes interes)
+        public async Task<ActionResult<Language>> PostLanguage(Language language)
         {
-          if (_context.Interests == null)
+          if (_context.Languages == null)
           {
-              return Problem("Entity set 'ApplicationContext.Interests'  is null.");
+              return Problem("Entity set 'ApplicationContext.Languages'  is null.");
           }
-            _context.Interests.Add(interes);
+            _context.Languages.Add(language);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInteres", new { id = interes.InteresId }, interes);
+            return CreatedAtAction("GetLanguage", new { id = language.LanguageId }, language);
         }
 
-        // DELETE: api/Interes/5
+        // DELETE: api/Languages/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInteres(Guid id)
+        public async Task<IActionResult> DeleteLanguage(Guid id)
         {
-            if (_context.Interests == null)
+            if (_context.Languages == null)
             {
                 return NotFound();
             }
-            var interes = await _context.Interests.FindAsync(id);
-            if (interes == null)
+            var language = await _context.Languages.FindAsync(id);
+            if (language == null)
             {
                 return NotFound();
             }
 
-            _context.Interests.Remove(interes);
+            _context.Languages.Remove(language);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool InteresExists(Guid id)
+        private bool LanguageExists(Guid id)
         {
-            return (_context.Interests?.Any(e => e.InteresId == id)).GetValueOrDefault();
+            return (_context.Languages?.Any(e => e.LanguageId == id)).GetValueOrDefault();
         }
     }
 }

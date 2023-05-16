@@ -19,6 +19,7 @@ namespace StudentServiceApplication.Services
 
         public string CreateToken(User user)
         {
+            //payload-полезные данные
             List<Claim> claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)

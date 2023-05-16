@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230516083556_ft21")]
+    partial class ft21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,32 +57,17 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("SkillUser", b =>
                 {
-                    b.Property<Guid>("HavingUsersUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("SkillsSkillId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("HavingUsersUserId", "SkillsSkillId");
+                    b.Property<Guid>("UsersUserId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("SkillsSkillId");
+                    b.HasKey("SkillsSkillId", "UsersUserId");
+
+                    b.HasIndex("UsersUserId");
 
                     b.ToTable("SkillUser");
-                });
-
-            modelBuilder.Entity("SkillUser1", b =>
-                {
-                    b.Property<Guid>("NeedingUsersUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("WantedSkillsSkillId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("NeedingUsersUserId", "WantedSkillsSkillId");
-
-                    b.HasIndex("WantedSkillsSkillId");
-
-                    b.ToTable("SkillUser1");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.Country", b =>
@@ -185,7 +173,7 @@ namespace StudentServiceApplication.Migrations
 
                     b.HasKey("SkillId");
 
-                    b.ToTable("WantedSkill", (string)null);
+                    b.ToTable("Skill");
                 });
 
             modelBuilder.Entity("StudentServiceApplication.Models.TranslatePhoto", b =>
@@ -273,30 +261,15 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("SkillUser", b =>
                 {
-                    b.HasOne("StudentServiceApplication.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("HavingUsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StudentServiceApplication.Models.Skill", null)
                         .WithMany()
                         .HasForeignKey("SkillsSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("SkillUser1", b =>
-                {
                     b.HasOne("StudentServiceApplication.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("NeedingUsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentServiceApplication.Models.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("WantedSkillsSkillId")
+                        .HasForeignKey("UsersUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

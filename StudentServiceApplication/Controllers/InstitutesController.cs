@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,55 +13,56 @@ namespace StudentServiceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InteresController : ControllerBase
+    public class InstitutesController : ControllerBase
     {
         private readonly ApplicationContext _context;
 
-        public InteresController(ApplicationContext context)
+        public InstitutesController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Interes
+        // GET: api/Institutes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Interes>>> GetInterests()
+        public async Task<ActionResult<IEnumerable<Institute>>> GetInstitutes()
         {
-          if (_context.Interests == null)
+          if (_context.Institutes == null)
           {
               return NotFound();
           }
-            return await _context.Interests.ToListAsync();
+            return await _context.Institutes.ToListAsync();
         }
 
-        // GET: api/Interes/5
+        // GET: api/Institutes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Interes>> GetInteres(Guid id)
+        public async Task<ActionResult<Institute>> GetInstitute(Guid id)
         {
-          if (_context.Interests == null)
+          if (_context.Institutes == null)
           {
               return NotFound();
           }
-            var interes = await _context.Interests.FindAsync(id);
+            var institute = await _context.Institutes.FindAsync(id);
 
-            if (interes == null)
+            if (institute == null)
             {
                 return NotFound();
             }
 
-            return interes;
+            return institute;
         }
 
-        // PUT: api/Interes/5
+        // PUT: api/Institutes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInteres(Guid id, Interes interes)
+        [Authorize]
+        public async Task<IActionResult> PutInstitute(Guid id, Institute institute)
         {
-            if (id != interes.InteresId)
+            if (id != institute.IstituteId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(interes).State = EntityState.Modified;
+            _context.Entry(institute).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +70,7 @@ namespace StudentServiceApplication.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InteresExists(id))
+                if (!InstituteExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +83,46 @@ namespace StudentServiceApplication.Controllers
             return NoContent();
         }
 
-        // POST: api/Interes
+        // POST: api/Institutes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Interes>> PostInteres(Interes interes)
+        [Authorize]
+        public async Task<ActionResult<Institute>> PostInstitute(Institute institute)
         {
-          if (_context.Interests == null)
+          if (_context.Institutes == null)
           {
-              return Problem("Entity set 'ApplicationContext.Interests'  is null.");
+              return Problem("Entity set 'ApplicationContext.Institutes'  is null.");
           }
-            _context.Interests.Add(interes);
+            _context.Institutes.Add(institute);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInteres", new { id = interes.InteresId }, interes);
+            return CreatedAtAction("GetInstitute", new { id = institute.IstituteId }, institute);
         }
 
-        // DELETE: api/Interes/5
+        // DELETE: api/Institutes/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInteres(Guid id)
+        [Authorize]
+        public async Task<IActionResult> DeleteInstitute(Guid id)
         {
-            if (_context.Interests == null)
+            if (_context.Institutes == null)
             {
                 return NotFound();
             }
-            var interes = await _context.Interests.FindAsync(id);
-            if (interes == null)
+            var institute = await _context.Institutes.FindAsync(id);
+            if (institute == null)
             {
                 return NotFound();
             }
 
-            _context.Interests.Remove(interes);
+            _context.Institutes.Remove(institute);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool InteresExists(Guid id)
+        private bool InstituteExists(Guid id)
         {
-            return (_context.Interests?.Any(e => e.InteresId == id)).GetValueOrDefault();
+            return (_context.Institutes?.Any(e => e.IstituteId == id)).GetValueOrDefault();
         }
     }
 }

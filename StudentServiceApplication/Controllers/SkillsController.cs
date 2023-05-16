@@ -12,55 +12,55 @@ namespace StudentServiceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InteresController : ControllerBase
+    public class SkillsController : ControllerBase
     {
         private readonly ApplicationContext _context;
 
-        public InteresController(ApplicationContext context)
+        public SkillsController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Interes
+        // GET: api/Skills
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Interes>>> GetInterests()
+        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
         {
-          if (_context.Interests == null)
+          if (_context.Skills == null)
           {
               return NotFound();
           }
-            return await _context.Interests.ToListAsync();
+            return await _context.Skills.ToListAsync();
         }
 
-        // GET: api/Interes/5
+        // GET: api/Skills/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Interes>> GetInteres(Guid id)
+        public async Task<ActionResult<Skill>> GetSkill(Guid id)
         {
-          if (_context.Interests == null)
+          if (_context.Skills == null)
           {
               return NotFound();
           }
-            var interes = await _context.Interests.FindAsync(id);
+            var skill = await _context.Skills.FindAsync(id);
 
-            if (interes == null)
+            if (skill == null)
             {
                 return NotFound();
             }
 
-            return interes;
+            return skill;
         }
 
-        // PUT: api/Interes/5
+        // PUT: api/Skills/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInteres(Guid id, Interes interes)
+        public async Task<IActionResult> PutSkill(Guid id, Skill skill)
         {
-            if (id != interes.InteresId)
+            if (id != skill.SkillId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(interes).State = EntityState.Modified;
+            _context.Entry(skill).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace StudentServiceApplication.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InteresExists(id))
+                if (!SkillExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace StudentServiceApplication.Controllers
             return NoContent();
         }
 
-        // POST: api/Interes
+        // POST: api/Skills
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Interes>> PostInteres(Interes interes)
+        public async Task<ActionResult<Skill>> PostSkill(Skill skill)
         {
-          if (_context.Interests == null)
+          if (_context.Skills == null)
           {
-              return Problem("Entity set 'ApplicationContext.Interests'  is null.");
+              return Problem("Entity set 'ApplicationContext.Skills'  is null.");
           }
-            _context.Interests.Add(interes);
+            _context.Skills.Add(skill);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInteres", new { id = interes.InteresId }, interes);
+            return CreatedAtAction("GetSkill", new { id = skill.SkillId }, skill);
         }
 
-        // DELETE: api/Interes/5
+        // DELETE: api/Skills/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInteres(Guid id)
+        public async Task<IActionResult> DeleteSkill(Guid id)
         {
-            if (_context.Interests == null)
+            if (_context.Skills == null)
             {
                 return NotFound();
             }
-            var interes = await _context.Interests.FindAsync(id);
-            if (interes == null)
+            var skill = await _context.Skills.FindAsync(id);
+            if (skill == null)
             {
                 return NotFound();
             }
 
-            _context.Interests.Remove(interes);
+            _context.Skills.Remove(skill);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool InteresExists(Guid id)
+        private bool SkillExists(Guid id)
         {
-            return (_context.Interests?.Any(e => e.InteresId == id)).GetValueOrDefault();
+            return (_context.Skills?.Any(e => e.SkillId == id)).GetValueOrDefault();
         }
     }
 }
