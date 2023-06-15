@@ -1,4 +1,5 @@
-﻿namespace StudentServiceApplication.Services
+﻿
+namespace StudentServiceApplication.Services
 {
     public class YandexTranslatePhotoService
     {

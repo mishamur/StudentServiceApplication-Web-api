@@ -41,6 +41,7 @@ namespace StudentServiceApplication
                     };
                 });
             builder.Services.AddControllers();
+            builder.Services.AddScoped<IImageConverterService, ImageConverterService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IHashService, BCryptHashService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

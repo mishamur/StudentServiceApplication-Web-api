@@ -1,7 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using StudentServiceApplication.Interfaces;
 using StudentServiceApplication.Models;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -36,7 +35,6 @@ namespace StudentServiceApplication.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokensDescriptor);
-            Debug.WriteLine(token);
             return tokenHandler.WriteToken(token);
 
         }
