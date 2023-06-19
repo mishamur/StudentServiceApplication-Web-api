@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230615195854_skillTableFix3")]
+    partial class skillTableFix3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,8 +57,8 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("SkillUser", b =>
                 {
-                    b.Property<Guid>("HavingSkillsSkillId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("HavingSkillsSkillId")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("HavingUsersUserId")
                         .HasColumnType("uuid");
@@ -69,8 +72,8 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("SkillUser1", b =>
                 {
-                    b.Property<Guid>("NeedingSkillsSkillId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("NeedingSkillsSkillId")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("NeedingUsersUserId")
                         .HasColumnType("uuid");
@@ -175,9 +178,11 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("StudentServiceApplication.Models.Skill", b =>
                 {
-                    b.Property<Guid>("SkillId")
+                    b.Property<int>("SkillId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SkillId"));
 
                     b.Property<string>("Name")
                         .IsRequired()

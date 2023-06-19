@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentServiceApplication;
@@ -11,9 +12,11 @@ using StudentServiceApplication;
 namespace StudentServiceApplication.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230615191100_ft24")]
+    partial class ft24
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,30 +57,30 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("SkillUser", b =>
                 {
-                    b.Property<Guid>("HavingSkillsSkillId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("HavingUsersUserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("HavingSkillsSkillId", "HavingUsersUserId");
+                    b.Property<Guid>("SkillsSkillId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("HavingUsersUserId");
+                    b.HasKey("HavingUsersUserId", "SkillsSkillId");
+
+                    b.HasIndex("SkillsSkillId");
 
                     b.ToTable("SkillUser");
                 });
 
             modelBuilder.Entity("SkillUser1", b =>
                 {
-                    b.Property<Guid>("NeedingSkillsSkillId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("NeedingUsersUserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("NeedingSkillsSkillId", "NeedingUsersUserId");
+                    b.Property<Guid>("WantedSkillsSkillId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("NeedingUsersUserId");
+                    b.HasKey("NeedingUsersUserId", "WantedSkillsSkillId");
+
+                    b.HasIndex("WantedSkillsSkillId");
 
                     b.ToTable("SkillUser1");
                 });
@@ -273,30 +276,30 @@ namespace StudentServiceApplication.Migrations
 
             modelBuilder.Entity("SkillUser", b =>
                 {
-                    b.HasOne("StudentServiceApplication.Models.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("HavingSkillsSkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StudentServiceApplication.Models.User", null)
                         .WithMany()
                         .HasForeignKey("HavingUsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentServiceApplication.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("SkillsSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("SkillUser1", b =>
                 {
-                    b.HasOne("StudentServiceApplication.Models.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("NeedingSkillsSkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StudentServiceApplication.Models.User", null)
                         .WithMany()
                         .HasForeignKey("NeedingUsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentServiceApplication.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("WantedSkillsSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

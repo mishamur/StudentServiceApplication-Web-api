@@ -34,6 +34,7 @@ namespace StudentServiceApplication.Controllers
             var response = await httpClient.PostAsync("translate/v2/translate", stringContent);
             string responseJson = await response.Content.ReadAsStringAsync();
             dynamic jsonResponse = JsonConvert.DeserializeObject(responseJson);
+
             string recognizedText = string.Empty;
             if (jsonResponse != null && jsonResponse.translations != null && jsonResponse.translations[0] != null)
             {
@@ -43,9 +44,10 @@ namespace StudentServiceApplication.Controllers
             return BadRequest();
         }
 
-        public async Task<IActionResult> AnalysText()
+        [HttpPost("AnalyseText")]
+        public async Task<IActionResult> AnalyseText()
         {
-            throw new NotImplementedException();
+            return BadRequest();
         }
     }
 }

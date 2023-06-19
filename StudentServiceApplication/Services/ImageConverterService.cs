@@ -1,4 +1,5 @@
-﻿using StudentServiceApplication.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Design;
+using StudentServiceApplication.Interfaces;
 using System.Drawing;
 
 namespace StudentServiceApplication.Services

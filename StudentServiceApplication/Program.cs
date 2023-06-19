@@ -13,7 +13,18 @@ namespace StudentServiceApplication
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:3000").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                                  });
+            });
+
             //получаем строку подключения из файла конфигурации
             string connection = builder.Configuration.GetConnectionString("DefaultConnection");
             //добавляем класс ApplicationContext в качестве сервиса в приложение
@@ -57,9 +68,8 @@ namespace StudentServiceApplication
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
 

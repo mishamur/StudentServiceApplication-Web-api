@@ -12,7 +12,6 @@ namespace StudentServiceApplication
         public DbSet<Institute> Institutes { get; set; } = null!;
         public DbSet<Message> Messages { get; set; } = null!;
         public DbSet<Skill> Skills { get; set; } = null!;
-        public DbSet<Skill> WantedSkills { get; set; } = null!;
         public DbSet<TranslatePhoto> TranslatePhotos { get; set; } = null!;
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
@@ -33,12 +32,12 @@ namespace StudentServiceApplication
             modelBuilder.Entity<Skill>()
                 .ToTable("HavingSkill")
                 .HasMany(s => s.HavingUsers)
-                .WithMany(u => u.Skills);
+                .WithMany(u => u.HavingSkills);
             
             modelBuilder.Entity<Skill>()
                 .ToTable("WantedSkill")
                 .HasMany(s => s.NeedingUsers)
-                .WithMany(u => u.WantedSkills);
+                .WithMany(u => u.NeedingSkills);
         }
     }
 }

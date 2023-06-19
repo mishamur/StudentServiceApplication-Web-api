@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentServiceApplication.Interfaces;
 using StudentServiceApplication.Models;
@@ -19,17 +20,18 @@ namespace StudentServiceApplication.Controllers
             _tokenService = tokenService;
             _hashService = hashService;
         }
-
+        [EnableCors("_myAllowSpecificOrigins")]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody]UserRegister? userRegister)
         {
             if(userRegister == null || !ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ValidationProblem(ModelState);
+                
             }
             if (FindByEmailAsync(userRegister.Email).Result)
             {
-                return BadRequest("пользователь с таким именем уже зарегистрирован");
+                return StatusCode(400, "пользователь с таким именем уже зарегистрирован");
             }
 
             User user = new User { Email = userRegister.Email, Password = _hashService.HashPassword(userRegister.Password)};
@@ -38,23 +40,23 @@ namespace StudentServiceApplication.Controllers
             
             return Ok(new {Email = user.Email, Token =  _tokenService.CreateToken(user)});
         }
-
+        [EnableCors("_myAllowSpecificOrigins")]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
             if (userLogin == null || !ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ValidationProblem(ModelState);
             }
-
+            var listUsers = _context.Users.ToList();
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email.Equals(userLogin.Email));
 
-            if(user == null) { return Unauthorized("Неверный логин и(или) пароль"); }
+            if(user == null) { return StatusCode(102, "Неверный логин и(или) пароль"); }
 
             //должна быть проверка hash`ей
             if(_hashService.VerifyPassword(userLogin.Password, user.Password))
                 return Ok(new { Email = user.Email, Token = _tokenService.CreateToken(user) });
-            return Unauthorized();
+            return BadRequest();
         }
 
         /// <summary>

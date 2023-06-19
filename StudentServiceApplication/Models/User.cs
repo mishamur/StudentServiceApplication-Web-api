@@ -17,8 +17,8 @@ namespace StudentServiceApplication.Models
         public Country Country { get; set; } = null!;
         public Guid InstituteId { get; set; }
         public Institute Institute { get; set; } = null!;
-        public ICollection<Skill> Skills { get; } = new List<Skill>();
-        public ICollection<Skill> WantedSkills { get; } = new List<Skill>();
+        public ICollection<Skill> HavingSkills { get; } = new List<Skill>();
+        public ICollection<Skill> NeedingSkills { get; } = new List<Skill>();
         public ICollection<Language> Languages { get; } = new List<Language>();
         public ICollection<Interes> Interests { get; } = new List<Interes>();
         public ICollection<TranslatePhoto> TranslatePhotos { get; } = new List<TranslatePhoto>();
